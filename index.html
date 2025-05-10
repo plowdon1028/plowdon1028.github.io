@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pearces Collection of Random Bullshitery </title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 40px;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+    }
+
+    section {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+    }
+
+    h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 20px;
+    }
+
+    #nowPlaying {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pearces Collection of Random Bullshitery</h1>
+
+  <section>
+    <h2>About me</h2>
+    <ul>
+      <li>Name: Pearce</li>
+      <li>Grade: 9th</li>
+      <li>In school for Environmental Sciences and Engineering</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Hobbies</h2>
+    <ul>
+      <li>Front-end Web Development</li>
+      <li>Red-Teaming</li>
+      <li>Engineering</li>
+      <li>Cycling/Biking</li>
+      <li>Politics</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Projects rn</h2>
+    <ul>
+      <li>Web Proxy</li>
+      <li>This website</li>
+      <li>MAYBE a custom linux distro</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Now Playing on Last.fm</h2>
+    <div id="nowPlaying">Loading...</div>
+  </section>
+
+  <script>
+    // === LAST.FM INTEGRATION ===
+    const apiKey = '610a61aef258441a0c9c8e1290fd7fcc';
+    const username = 'TheKrazedKat';
+
+    async function getNowPlaying() {
+      const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const track = data.recenttracks.track[0];
+        const nowPlaying = track['@attr']?.nowplaying
+          ? `${track.artist['#text']} - ${track.name}`
+          : "Not playing anything right now.";
+        document.getElementById('nowPlaying').textContent = nowPlaying;
+      } catch (error) {
+        document.getElementById('nowPlaying').textContent = "Error loading data.";
+      }
+    }
+
+    getNowPlaying();
+    setInterval(getNowPlaying, 30000); // refresh every 30 seconds
+  </script>
+
+</body>
+</html>
